@@ -49,7 +49,7 @@
                     <div class="mb-3">
                         <div class="d-flex align-items-center">
                             <label for="departamento" class="me-2">Departamento:</label>
-                            <select name="departamento" id="departamento" class="form-select" v-model="model.articulo.departamento" :disabled="!alta" @change="cargarClases">
+                            <select name="departamento" id="departamento" class="form-select" v-model="model.articulo.id_departamento" :disabled="!alta" @change="cargarClases">
                                 <option v-for="departamento in departamentos" :key="departamento.id" :value="departamento.id">{{ departamento.nombre }} </option>
                             </select>
                             <ErrorMessage name="sexo" class="errorValidacion"/>
@@ -58,7 +58,7 @@
                     <div class="mb-3">
                         <div class="d-flex align-items-center">
                             <label for="clase" class="me-2">Clase:</label>
-                            <select name="clase" id="clase" class="form-select" :disabled="!departamentoSelected" v-model="model.articulo.clase" @change="cargarFamilias" >
+                            <select name="clase" id="clase" class="form-select" :disabled="!departamentoSelected" v-model="model.articulo.id_clase" @change="cargarFamilias" >
                                 <option v-for="clase in clases" :key="clase.id" :value="clase.id">{{ clase.nombre}} </option>
                             </select>
                             <ErrorMessage name="sexo" class="errorValidacion"/>
@@ -67,7 +67,7 @@
                     <div class="mb-3">
                         <div class="d-flex align-items-center">
                             <label for="familia" class="me-2">Familia:</label>
-                            <select name="familia" id="familia" class="form-select" :disabled="!claseSelected" v-model="model.articulo.familia">
+                            <select name="familia" id="familia" class="form-select" :disabled="!claseSelected" v-model="model.articulo.id_familia">
                                 <option v-for="familia in familias" :key="familia.id" :value="familia.id">{{ familia.nombre}} </option>
                             </select>
                             <ErrorMessage name="sexo" class="errorValidacion"/>
@@ -98,7 +98,7 @@
                             <div class="mb-3">
                                 <div class="d-flex align-items-center">
                                     <label for="fechaAlta" class="me-2">Fecha Alta:</label>
-                                    <Field name="fechaAlta" id="fechaAlta" type="date" class="form-control" :disabled="true" v-model="model.articulo.fechaAlta"/>
+                                    <Field name="fechaAlta" id="fechaAlta" type="date" class="form-control" :disabled="true" v-model="model.articulo.fecha_alta"/>
                                     <ErrorMessage name="fechaAlta" class="errorValidacion"/>
                                 </div>
                             </div>
@@ -107,7 +107,7 @@
                             <div class="mb-3">
                                 <div class="d-flex align-items-center">
                                     <label for="fechaBaja" class="me-2">Fecha Baja:</label>
-                                    <Field name="fechaBaja" id="fechaBaja" type="date" class="form-control" :disabled="true" v-model="model.articulo.fechaBaja"/>
+                                    <Field name="fechaBaja" id="fechaBaja" type="date" class="form-control" :disabled="true" v-model="model.articulo.fecha_baja"/>
                                     <ErrorMessage name="fechaBaja" class="errorValidacion"/>
                                 </div>
                             </div>
@@ -186,13 +186,13 @@ import apiclient from '../apiclient.js';
                         articulo:'',
                         marca:'',
                         modelo:'',
-                        departamento: '',
-                        clase: '',
-                        familia: '',
+                        id_departamento: '',
+                        id_clase: '',
+                        id_familia: '',
                         stock: '',
                         cantidad: '',
-                        fechaAlta: new Date().toISOString().split('T')[0],
-                        fechaBaja: '1900-01-01',
+                        fecha_alta: new Date().toISOString().split('T')[0],
+                        fecha_baja: '1900-01-01',
                     }
                 }
             }
@@ -200,20 +200,8 @@ import apiclient from '../apiclient.js';
         methods:{
             crearArticulo(){
                 try {
-                    apiclient.articulos.crearArticulo(
-                        this.model.articulo.sku,
-                        this.model.articulo.descontinuado,
-                        this.model.articulo.articulo,
-                        this.model.articulo.marca,
-                        this.model.articulo.modelo,
-                        this.model.articulo.departamento,
-                        this.model.articulo.clase,
-                        this.model.articulo.familia,
-                        this.model.articulo.stock,
-                        this.model.articulo.cantidad,
-                        this.model.articulo.fechaAlta,
-                        this.model.articulo.fechaBaja
-                    ).then(res =>{
+                    apiclient.articulos.crearArticulo(this.model.articulo)
+                    .then(res =>{
                         console.log(this.model);
                     });
                     //alert('Articulo Creado con exito!');
@@ -224,20 +212,8 @@ import apiclient from '../apiclient.js';
             },
             actualizarArticulo(){
                 try {
-                    apiclient.articulos.actualizarArticulo(
-                        this.model.articulo.sku,
-                        this.model.articulo.descontinuado,
-                        this.model.articulo.articulo,
-                        this.model.articulo.marca,
-                        this.model.articulo.modelo,
-                        this.model.articulo.departamento,
-                        this.model.articulo.clase,
-                        this.model.articulo.familia,
-                        this.model.articulo.stock,
-                        this.model.articulo.cantidad,
-                        this.model.articulo.fechaAlta,
-                        this.model.articulo.fechaBaja
-                    ).then(res =>{
+                    apiclient.articulos.actualizarArticulo(this.model.articulo)
+                    .then(res =>{
                         console.log(this.model);
                     });
                     //alert('Articulo Actualizado con exito!');
@@ -269,24 +245,24 @@ import apiclient from '../apiclient.js';
                 });
             },
             getClases(){
-                apiclient.dcf.getClaseByDepartamentoId(this.model.articulo.departamento).then(res =>{
+                apiclient.dcf.getClaseByDepartamentoId(this.model.articulo.id_departamento).then(res =>{
                     this.clases = res.data.clase;
                 });
             },
             getFamilias(){
-                apiclient.dcf.getFamiliasByClase_DepartamentoId(this.model.articulo.clase, this.model.articulo.departamento).then(res =>{
+                apiclient.dcf.getFamiliasByClase_DepartamentoId(this.model.articulo.id_clase, this.model.articulo.id_departamento).then(res =>{
                     this.familias = res.data.familia;
                 });
             },
             cargarClases(){
-                this.model.articulo.clase = '';
-                this.model.articulo.familia = '';
+                this.model.articulo.id_clase = '';
+                this.model.articulo.id_familia = '';
                 this.claseSelected = false;
                 this.getClases();
                 this.departamentoSelected = true;
             },
             cargarFamilias(){
-                this.model.articulo.familia = '';
+                this.model.articulo.id_familia = '';
                 this.getFamilias();
                 this.claseSelected = true;
             },
@@ -310,11 +286,8 @@ import apiclient from '../apiclient.js';
                         this.cambio = true;
                         this.alta = false;
                         this.model.articulo = res.data.articulo[0];
-                        this.model.articulo.departamento = res.data.articulo[0].id_departamento;
-                        this.model.articulo.clase = res.data.articulo[0].id_clase;
-                        this.model.articulo.familia = res.data.articulo[0].id_familia;
-                        this.model.articulo.fechaAlta = res.data.articulo[0].fecha_alta.split('T')[0];
-                        this.model.articulo.fechaBaja = res.data.articulo[0].fecha_baja.split('T')[0];
+                        this.model.articulo.fecha_alta = res.data.articulo[0].fecha_alta.split('T')[0];
+                        this.model.articulo.fecha_baja = res.data.articulo[0].fecha_baja.split('T')[0];
                         this.getClases();
                         this.getFamilias();
                     }else{
@@ -330,13 +303,13 @@ import apiclient from '../apiclient.js';
                     articulo:'',
                     marca:'',
                     modelo:'',
-                    departamento: '',
-                    clase: '',
-                    familia: '',
+                    id_departamento: '',
+                    id_clase: '',
+                    id_familia: '',
                     stock: '',
                     cantidad: '',
-                    fechaAlta: new Date().toISOString().split('T')[0],
-                    fechaBaja: '1900-01-01',
+                    fecha_alta: new Date().toISOString().split('T')[0],
+                    fecha_baja: '1900-01-01',
                 }
                 this.alta = false;
                 this.cambio = false;

@@ -78,20 +78,6 @@ export const crearArticulo = [
             fechaBaja
         } = req.body;
 
-        console.log({
-            sku: sku,
-            descontinuado: descontinuado,
-            articulo: articulo,
-            marca: marca,
-            modelo: modelo,
-            departamento: departamento,
-            clase: clase,
-            familia: familia,
-            stock: stock,
-            cantidad: cantidad,
-            fechaAlta: fechaAlta,
-            fechaBaja: fechaBaja
-        });
         const query = `
             CALL crearArticulo(
                 $1::INT, 
@@ -132,20 +118,7 @@ export const crearArticulo = [
                 console.log('Artículo creado exitosamente');
                 return res.status(201).json({ 
                     message: 'Artículo creado exitosamente!',
-                    articulo: {
-                        sku,
-                        descontinuado,
-                        articulo,
-                        marca,
-                        modelo,
-                        departamento,
-                        clase,
-                        familia,
-                        stock,
-                        cantidad,
-                        fechaAlta,
-                        fechaBaja
-                    }
+                    articulo: req.body
                 });
             }
         );
@@ -217,20 +190,7 @@ export const actualizarArticulo = [
                 console.log('Artículo actualizado exitosamente');
                 return res.status(200).json({ 
                     message: 'Artículo actualizado exitosamente!',
-                    articulo: {
-                        sku,
-                        descontinuado,
-                        articulo,
-                        marca,
-                        modelo,
-                        departamento,
-                        clase,
-                        familia,
-                        stock,
-                        cantidad,
-                        fechaAlta,
-                        fechaBaja
-                    }
+                    articulo: req.body
                 });
             }
         );
