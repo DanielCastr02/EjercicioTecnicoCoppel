@@ -11,13 +11,13 @@ const crearArticuloValidate = [
     check('articulo').isLength({ max: 15 }).withMessage('El articulo esta muy largo'),
     check('marca').isLength({ max: 15 }).withMessage('La marca esta muy largo'),
     check('modelo').isLength({ max: 20 }).withMessage('El modelo esta muy largo'),
-    check('departamento').isLength({ min: 1, max: 1 }).withMessage('El departamento debe ser un digito'),
-    check('clase').isLength({ min: 2,  max: 2 }).withMessage('La clase debe ser dos digitos'),
-    check('familia').isLength({ min: 3,  max: 3 }).withMessage('LA familia debe ser tres digitos'),
+    check('id_departamento').isLength({ min: 1, max: 1 }).withMessage('El departamento debe ser un digito'),
+    check('id_clase').isLength({ min: 2,  max: 2 }).withMessage('La clase debe ser dos digitos'),
+    check('id_familia').isLength({ min: 3,  max: 3 }).withMessage('La familia debe ser tres digitos'),
     check('stock').isInt().withMessage('El stock debe ser un número entero.'),
     check('cantidad').isInt().withMessage('La cantidad debe ser un número entero.'),
-    check('fechaAlta').isDate().withMessage('La fecha de alta debe ser una fecha valida.'),
-    check('fechaBaja').isDate().withMessage('La fecha de baja debe ser una fecha valida.'),
+    check('fecha_alta').isDate().withMessage('La fecha de alta debe ser una fecha valida.'),
+    check('fecha_baja').isDate().withMessage('La fecha de baja debe ser una fecha valida.'),
 ]
 
 export const getArticulos = (req, res) => {
@@ -62,6 +62,7 @@ export const crearArticulo = [
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
         }
+        console.log(req.body);
 
         const {
             sku,
@@ -69,13 +70,13 @@ export const crearArticulo = [
             articulo,
             marca,
             modelo,
-            departamento,
-            clase,
-            familia,
+            id_departamento,
+            id_clase,
+            id_familia,
             stock,
             cantidad,
-            fechaAlta,
-            fechaBaja
+            fecha_alta,
+            fecha_baja
         } = req.body;
 
         const query = `
@@ -102,13 +103,13 @@ export const crearArticulo = [
                 articulo,
                 marca,
                 modelo,
-                departamento,
-                clase,
-                familia,
+                id_departamento,
+                id_clase,
+                id_familia,
                 stock,
                 cantidad,
-                fechaAlta,
-                fechaBaja
+                fecha_alta,
+                fecha_baja
             ],
             (error, results) => {
                 if (error) {
@@ -141,13 +142,13 @@ export const actualizarArticulo = [
             articulo,
             marca,
             modelo,
-            departamento,
-            clase,
-            familia,
+            id_departamento,
+            id_clase,
+            id_familia,
             stock,
             cantidad,
-            fechaAlta,
-            fechaBaja
+            fecha_alta,
+            fecha_baja
         } = req.body;
 
         const query = `
@@ -174,13 +175,13 @@ export const actualizarArticulo = [
                 articulo,
                 marca,
                 modelo,
-                departamento,
-                clase,
-                familia,
+                id_departamento,
+                id_clase,
+                id_familia,
                 stock,
                 cantidad,
-                fechaAlta,
-                fechaBaja
+                fecha_alta,
+                fecha_baja
             ],
             (error, results) => {
                 if (error) {
@@ -220,3 +221,15 @@ export const eliminarArticulo = [
         );
     }
 ];
+
+export const exportCSV = (req, res) => {
+    pool.query('SELECT * FROM exportCSV();', (error, results) => {
+        if(error){
+            console.error('Error obteniendo articulo:', error);
+            res.status(500).send('Error obteniendo articulo');
+        } else {
+            console.log('Enlazando articulo...');
+            res.status(201).json({message : 'Articulo obtenido exitosamente!', articulo: results.rows});
+        }
+    });
+}

@@ -2,126 +2,122 @@
     <div class="container mt-5">
         <div class="card">
             <div class="card-header">
-                <h4> Sistema Articulos</h4>
+                <h4>Sistema Articulos</h4>
             </div>
             <div class="card-body">
-                <Form :validation-schema="validationSchema">
-                    <div class="mb-3 row">
+                <Form :validation-schema="validationSchema" @submit="checked" ref="form">
+                    <div class="row mb-3 align-items-center">
+                        <div class="col-md-2">
+                            <label for="sku" class="form-label">SKU:</label>
+                        </div>
                         <div class="col-md-6">
-                            <div class="d-flex align-items-center">
-                                <label for="sku" class="me-2">SKU:</label>
-                                <Field name="sku" id="sku" type="text" class="form-control" maxlength="6" v-model="model.articulo.sku" @keypress="validateInputNumber" @keydown.enter="validarSku"/>
-                            </div>
+                            <Field name="sku" id="sku" type="number" class="form-control" maxlength="6" v-model="model.articulo.sku" @keypress="validateInputNumber" @keydown.enter="validarSku"/>
                             <ErrorMessage name="sku" class="errorValidacion"/>
                         </div>
-                        <div class="col-md-6 d-flex align-items-center justify-content-end">
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="descontinuado" :disabled="!actualizar" v-model="model.articulo.descontinuado" 
-                                />
-                                <label for="descontinuado" class="form-check-label">
-                                    Descontinuado
-                                </label>
-                            </div>
-                            <ErrorMessage name="descontinuado" class="errorValidacion"/>
+                        <div class="col-md-4 d-flex align-items-center">
+                            <input class="form-check-input me-2" type="checkbox" id="descontinuado" :disabled="!actualizar" v-model="model.articulo.descontinuado" />
+                            <label for="descontinuado" class="form-check-label">Descontinuado</label>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <label for="articulo" class="me-2">Articulo:</label>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="articulo" class="form-label">Articulo:</label>
+                        </div>
+                        <div class="col-md-10">
                             <Field name="articulo" id="articulo" type="text" class="form-control" maxlength="15" v-model="model.articulo.articulo" :disabled="!alta" />
                             <ErrorMessage name="articulo" class="errorValidacion"/>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <label for="marca" class="me-2">Marca:</label>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="marca" class="form-label">Marca:</label>
+                        </div>
+                        <div class="col-md-10">
                             <Field name="marca" id="marca" type="text" class="form-control" maxlength="15" v-model="model.articulo.marca" :disabled="!alta" />
                             <ErrorMessage name="marca" class="errorValidacion"/>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <label for="modelo" class="me-2">Modelo:</label>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="modelo" class="form-label">Modelo:</label>
+                        </div>
+                        <div class="col-md-10">
                             <Field name="modelo" id="modelo" type="text" class="form-control" maxlength="20" v-model="model.articulo.modelo" :disabled="!alta" />
                             <ErrorMessage name="modelo" class="errorValidacion"/>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <label for="departamento" class="me-2">Departamento:</label>
-                            <select name="departamento" id="departamento" class="form-select" v-model="model.articulo.id_departamento" :disabled="!alta" @change="cargarClases">
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="id_departamento" class="form-label">Departamento:</label>
+                        </div>
+                        <div class="col-md-10">
+                            <Field as="select" name="id_departamento" id="id_departamento" class="form-select" v-model="model.articulo.id_departamento" :disabled="!alta" @change="cargarClases">
                                 <option v-for="departamento in departamentos" :key="departamento.id" :value="departamento.id">{{ departamento.nombre }} </option>
-                            </select>
-                            <ErrorMessage name="sexo" class="errorValidacion"/>
+                            </Field>
+                            <ErrorMessage name="id_departamento" class="errorValidacion"/>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <label for="clase" class="me-2">Clase:</label>
-                            <select name="clase" id="clase" class="form-select" :disabled="!departamentoSelected" v-model="model.articulo.id_clase" @change="cargarFamilias" >
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="id_clase" class="form-label">Clase:</label>
+                        </div>
+                        <div class="col-md-10">
+                            <Field as="select" name="id_clase" id="id_clase" class="form-select" :disabled="!departamentoSelected" v-model="model.articulo.id_clase" @change="cargarFamilias">
                                 <option v-for="clase in clases" :key="clase.id" :value="clase.id">{{ clase.nombre}} </option>
-                            </select>
-                            <ErrorMessage name="sexo" class="errorValidacion"/>
+                            </Field>
+                            <ErrorMessage name="id_clase" class="errorValidacion"/>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <div class="d-flex align-items-center">
-                            <label for="familia" class="me-2">Familia:</label>
-                            <select name="familia" id="familia" class="form-select" :disabled="!claseSelected" v-model="model.articulo.id_familia">
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="id_familia" class="form-label">Familia:</label>
+                        </div>
+                        <div class="col-md-10">
+                            <Field as="select" name="id_familia" id="id_familia" class="form-select" :disabled="!claseSelected" v-model="model.articulo.id_familia">
                                 <option v-for="familia in familias" :key="familia.id" :value="familia.id">{{ familia.nombre}} </option>
-                            </select>
-                            <ErrorMessage name="sexo" class="errorValidacion"/>
+                            </Field>
+                            <ErrorMessage name="id_familia" class="errorValidacion"/>
                         </div>
                     </div>
-                    <div class="mb-3 row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center">
-                                    <label for="stock" class="me-2">Stock:</label>
-                                    <Field name="stock" id="stock" type="text" class="form-control" maxlength="9" v-model="model.articulo.stock" @keypress="validateInputNumber" :disabled="!alta"/>
-                                    <ErrorMessage name="stock" class="errorValidacion"/>
-                                </div>
-                            </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="stock" class="form-label">Stock:</label>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center">
-                                    <label for="cantidad" class="me-2">Cantidad:</label>
-                                    <Field name="cantidad" id="cantidad" type="text" class="form-control" maxlength="9" v-model="model.articulo.cantidad" @keypress="validateInputNumber" :disabled="!alta"/>
-                                    <ErrorMessage name="cantidad" class="errorValidacion"/>
-                                </div>
-                            </div>
+                        <div class="col-md-4">
+                            <Field name="stock" id="stock" type="number" class="form-control" maxlength="9" v-model="model.articulo.stock" @keypress="validateInputNumber" :disabled="!alta"/>
+                            <ErrorMessage name="stock" class="errorValidacion"/>
+                        </div>
+                        <div class="col-md-2">
+                            <label for="cantidad" class="form-label">Cantidad:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <Field name="cantidad" id="cantidad" type="number" class="form-control" maxlength="9" v-model="model.articulo.cantidad" @keypress="validateInputNumber" :disabled="!alta"/>
+                            <ErrorMessage name="cantidad" class="errorValidacion"/>
                         </div>
                     </div>
-                    <div class="mb-3 row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center">
-                                    <label for="fechaAlta" class="me-2">Fecha Alta:</label>
-                                    <Field name="fechaAlta" id="fechaAlta" type="date" class="form-control" :disabled="true" v-model="model.articulo.fecha_alta"/>
-                                    <ErrorMessage name="fechaAlta" class="errorValidacion"/>
-                                </div>
-                            </div>
+                    <div class="row mb-3">
+                        <div class="col-md-2">
+                            <label for="fecha_alta" class="form-label">Fecha Alta:</label>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <div class="d-flex align-items-center">
-                                    <label for="fechaBaja" class="me-2">Fecha Baja:</label>
-                                    <Field name="fechaBaja" id="fechaBaja" type="date" class="form-control" :disabled="true" v-model="model.articulo.fecha_baja"/>
-                                    <ErrorMessage name="fechaBaja" class="errorValidacion"/>
-                                </div>
-                            </div>
+                        <div class="col-md-4">
+                            <Field name="fecha_alta" id="fecha_alta" type="date" class="form-control" :disabled="true" v-model="model.articulo.fecha_alta"/>
+                            <ErrorMessage name="fecha_alta" class="errorValidacion"/>
                         </div>
-                    <div>
+                        <div class="col-md-2">
+                            <label for="fecha_baja" class="form-label">Fecha Baja:</label>
+                        </div>
+                        <div class="col-md-4">
+                            <Field name="fecha_baja" id="fecha_baja" type="date" class="form-control" :disabled="true" v-model="model.articulo.fecha_baja"/>
+                            <ErrorMessage name="fecha_baja" class="errorValidacion"/>
+                        </div>
                     </div>
-                        </div>
-                    <div class="mb-3 d-flex justify-content-end">
-                        <button v-if="alta && !cambio" @click.prevent="crearArticulo" class="btn btn-primary me-2"> Guardar </button>
-                        <button v-if="cambio && !actualizar" @click.prevent="botonActualizar" class="btn btn-secondary me-2"> Actualizar </button>
-                        <button v-if="actualizar" @click.prevent="actualizarArticulo" class="btn btn-success me-2"> Confirmar </button>
-                        <button v-if="cambio" @click.prevent="eliminarArticulo" class="btn btn-danger"> Eliminar </button>
+                    <div class="d-flex justify-content-end">
+                        <button v-if="alta && !cambio" type="submit" class="btn btn-primary me-2">Guardar</button>
+                        <button v-if="actualizar" type="submit" class="btn btn-success me-2">Confirmar</button>
+                        <button v-if="cambio && !actualizar" @click.prevent="botonActualizar" class="btn btn-secondary me-2">Actualizar</button>
+                        <button v-if="cambio" @click.prevent="eliminarArticulo" class="btn btn-danger">Eliminar</button>
                     </div>
-                </Form> 
+                </Form>
             </div>
         </div>
     </div>
@@ -135,42 +131,23 @@ import apiclient from '../apiclient.js';
         nombre: 'articulos',
         components: {Field, ErrorMessage, Form},
         data(){
-        //     const validationSchema = zod.object({
-        //     sku: zod
-        //     .string()
-        //     .nonempty({ message: "El SKU no puede estar vacío" }),
-        //     articulo: zod
-        //     .string()
-        //     .nonempty({ message: "El artículo no puede estar vacío" }),
-        //     marca: zod
-        //     .string()
-        //     .nonempty({ message: "La marca no puede estar vacía" }),
-        //     modelo: zod
-        //     .string()
-        //     .nonempty({ message: "El modelo no puede estar vacío" }),
-        //     departamento: zod
-        //     .number()
-        //     .int()
-        //     .nonempty({ message: "El departamento no puede estar vacío" }),
-        //     clase: zod
-        //     .number()
-        //     .int()
-        //     .nonempty({ message: "La clase no puede estar vacía" }),
-        //     familia: zod
-        //     .number()
-        //     .int()
-        //     .nonempty({ message: "La familia no puede estar vacía" }),
-        //     stock: zod
-        //     .number()
-        //     .int()
-        //     .nonempty({ message: "El stock no puede estar vacío" }),
-        //     cantidad: zod
-        //     .number()
-        //     .int()
-        //     .nonempty({ message: "La cantidad no puede estar vacía" }),
-        // });
+            const validationSchema = toTypedSchema(
+                zod.object({
+                    sku: zod.number().min(1, 'El SKU es obligatorio y debe ser un número positivo'),
+                    articulo: zod.string().max(15, 'El nombre del artículo no puede tener más de 15 caracteres').min(1, 'El artículo es obligatorio'),
+                    marca: zod.string().max(15, 'La marca no puede tener más de 15 caracteres').min(1, 'La marca es obligatoria'),
+                    modelo: zod.string().max(20, 'El modelo no puede tener más de 20 caracteres').min(1, 'El modelo es obligatorio'),
+                    id_departamento: zod.string().min(1, 'El departamento es obligatorio'),
+                    id_clase: zod.string().min(1, 'La clase es obligatoria'),
+                    id_familia: zod.string().min(1, 'La familia es obligatoria'),
+                    stock: zod.number().min(1, 'El stock es obligatorio y debe ser un número positivo'),
+                    cantidad: zod.number().min(1, 'La cantidad es obligatoria y debe ser un número positivo'),
+                    fecha_alta: zod.string().min(1, 'La fecha de alta es obligatoria'),
+                    fecha_baja: zod.string().min(1, 'La fecha de baja es obligatoria')
+                })
+            );      
             return{
-                //validationSchema,
+                validationSchema,
                 alta: false,
                 cambio: false,
                 actualizar: false,
@@ -198,13 +175,25 @@ import apiclient from '../apiclient.js';
             }
         },
         methods:{
+            checked(){
+                if (this.model.articulo.cantidad > this.model.articulo.stock) {
+                    alert('La cantidad no puede ser mayor que el stock disponible.');
+                    return;
+                }
+                if(this.alta && !this.actualizar){
+                    this.crearArticulo();
+                }
+                if(this.actualizar && this.alta){
+                    this.actualizarArticulo();
+                }
+            },
             crearArticulo(){
                 try {
                     apiclient.articulos.crearArticulo(this.model.articulo)
                     .then(res =>{
                         console.log(this.model);
+                        alert('Artículo creado exitosamente.');
                     });
-                    //alert('Articulo Creado con exito!');
                 } catch (error) {
                     console.error(error)
                 }
@@ -215,23 +204,29 @@ import apiclient from '../apiclient.js';
                     apiclient.articulos.actualizarArticulo(this.model.articulo)
                     .then(res =>{
                         console.log(this.model);
+                        alert('Artículo actualizado exitosamente.');
                     });
-                    //alert('Articulo Actualizado con exito!');
                 } catch (error) {
                     console.error(error)
                 }
                 this.limpiar();
             },
-            eliminarArticulo(){
-                try {
-                    apiclient.articulos.eliminarArticulo(this.model.articulo.sku).then(res =>{
-                        console.log(this.model);
-                    });
-                    //alert('Articulo Eliminado con exito!');
-                } catch (error) {
-                    console.error(error)
+            eliminarArticulo() {
+                if (confirm('¿Estás seguro de que deseas eliminar este artículo?')) {
+                    try {
+                        apiclient.articulos.eliminarArticulo(this.model.articulo.sku)
+                            .then(res => {
+                                console.log(this.model);
+                                alert('Artículo eliminado exitosamente.');
+                            });
+                    } catch (error) {
+                        console.error(error);
+                        alert('Error al eliminar el artículo.');
+                    }
+                    this.limpiar();
+                } else {
+                    alert('Eliminación cancelada.');
                 }
-                this.limpiar();
             },
             botonActualizar(){
                 this.alta = true;
@@ -250,7 +245,10 @@ import apiclient from '../apiclient.js';
                 });
             },
             getFamilias(){
-                apiclient.dcf.getFamiliasByClase_DepartamentoId(this.model.articulo.id_clase, this.model.articulo.id_departamento).then(res =>{
+                apiclient.dcf.getFamiliasByClase_DepartamentoId(
+                    this.model.articulo.id_clase, 
+                    this.model.articulo.id_departamento
+                ).then(res =>{
                     this.familias = res.data.familia;
                 });
             },
@@ -275,9 +273,8 @@ import apiclient from '../apiclient.js';
             },
             validarSku(event){
                 event.preventDefault();
-                if(this.model.articulo.sku.length == 0){
-                    this.limpiar();
-                }
+                this.limpiar();
+                this.model.articulo.sku = parseInt(event.target.value.trim());
                 this.getDepartamentos();
                 this.departamentoSelected = false;
                 this.claseSelected = false;
@@ -316,6 +313,7 @@ import apiclient from '../apiclient.js';
                 this.actualizar = false;
                 this.departamentoSelected = false;
                 this.claseSelected = false;
+                this.$refs.form.resetForm();
             }
         }
     }
@@ -324,6 +322,8 @@ import apiclient from '../apiclient.js';
 <style scoped>
 .errorValidacion{
     color: red;
-    
+}
+template{
+    background-color: #adacac;
 }
 </style>

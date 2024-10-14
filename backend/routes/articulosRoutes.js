@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { getArticulos, getArticuloBySku, crearArticulo, actualizarArticulo, eliminarArticulo } from "../controllers/articulosController.js";
+import { getArticulos, getArticuloBySku, crearArticulo, actualizarArticulo, eliminarArticulo, exportCSV } from "../controllers/articulosController.js";
 
 const articulosRoutes = Router();
 
 
 articulosRoutes.get('', getArticulos);
+articulosRoutes.get('/export', exportCSV);
 articulosRoutes.get('/:sku', getArticuloBySku);
 articulosRoutes.post('/crear', crearArticulo );
 articulosRoutes.put('/actualizar', actualizarArticulo );

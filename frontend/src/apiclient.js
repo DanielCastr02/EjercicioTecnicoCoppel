@@ -10,6 +10,7 @@ export default {
             return axiosinstance.get(`articulos/${sku}`);
         },
         crearArticulo(articulo) {
+            console.log(articulo);
             return axiosinstance.post(`articulos/crear`, articulo);
         },
         actualizarArticulo(articulo) {
@@ -18,6 +19,9 @@ export default {
         eliminarArticulo(sku){
             return axiosinstance.delete(`articulos/eliminar/${sku}`);
         },
+        exportCSV(){
+            return axiosinstance.get(`articulos/export`);
+        }
     },
     dcf:{
         getDepartamentos(){

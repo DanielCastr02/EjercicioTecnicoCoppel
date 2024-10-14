@@ -15,6 +15,7 @@ CREATE TABLE articulos (
     FOREIGN KEY (id_departamento, id_clase) REFERENCES clases (id_departamento, id),
     FOREIGN KEY (id_departamento, id_clase, id_familia) REFERENCES familias (id_departamento, id_clase, id)
 );
+
 --FUNCIONES
 CREATE OR REPLACE FUNCTION getArticuloBySku(
     articulo_sku INT
@@ -44,6 +45,55 @@ BEGIN
     WHERE a.sku = articulo_sku; 
 END;
 $$;
+
+CREATE FUNCTION exportCSV()
+RETURNS TABLE (
+    sku INT,
+    articulo VARCHAR(15),
+    marca VARCHAR(15),
+    modelo VARCHAR(20),
+    stock INT,
+    cantidad INT,
+    fecha_alta DATE,
+    fecha_baja DATE,
+    descontinuado INT,
+    id_departamento CHAR(1),
+    departamento_nombre TEXT,
+    id_clase CHAR(2),
+    clase_nombre TEXT,
+    id_familia CHAR(3),
+    familia_nombre TEXT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        a.sku,
+        a.articulo,
+        a.marca,
+        a.modelo,
+        a.stock,
+        a.cantidad,
+        a.fecha_alta,
+        a.fecha_baja,
+        a.descontinuado,
+        a.id_departamento,
+        d.nombre AS departamento_nombre,
+        a.id_clase,
+        c.nombre AS clase_nombre,
+        a.id_familia,
+        f.nombre AS familia_nombre
+    FROM
+        articulos a
+    INNER JOIN
+        departamentos d ON a.id_departamento = d.id
+    INNER JOIN
+        clases c ON a.id_departamento = c.id_departamento AND a.id_clase = c.id
+    INNER JOIN
+        familias f ON a.id_departamento = f.id_departamento AND a.id_clase = f.id_clase AND a.id_familia = f.id;
+END;
+$$ LANGUAGE plpgsql;
+
+
 
 -- PROCEDIMIENTOS ALMACENADOS
 --Post
