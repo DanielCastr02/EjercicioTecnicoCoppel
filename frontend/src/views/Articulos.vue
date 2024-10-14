@@ -15,7 +15,15 @@
                             <ErrorMessage name="sku" class="errorValidacion"/>
                         </div>
                         <div class="col-md-4 d-flex align-items-center">
-                            <input class="form-check-input me-2" type="checkbox" id="descontinuado" :disabled="!actualizar" v-model="model.articulo.descontinuado" />
+                            <input 
+                                class="form-check-input me-2" 
+                                type="checkbox" 
+                                id="descontinuado" 
+                                :disabled="!actualizar" 
+                                v-model="model.articulo.descontinuado" 
+                                :true-value="1" 
+                                :false-value="0" 
+                                />
                             <label for="descontinuado" class="form-check-label">Descontinuado</label>
                         </div>
                     </div>
@@ -180,6 +188,9 @@ import apiclient from '../apiclient.js';
                     alert('La cantidad no puede ser mayor que el stock disponible.');
                     return;
                 }
+                if(this.model.articulo.descontinuado == 1){
+                    this.model.articulo.fecha_baja = new Date().toISOString().split('T')[0];
+                }
                 if(this.alta && !this.actualizar){
                     this.crearArticulo();
                 }
@@ -273,8 +284,9 @@ import apiclient from '../apiclient.js';
             },
             validarSku(event){
                 event.preventDefault();
+                const skuEvent = parseInt(event.target.value);
                 this.limpiar();
-                this.model.articulo.sku = parseInt(event.target.value.trim());
+                this.model.articulo.sku = skuEvent;
                 this.getDepartamentos();
                 this.departamentoSelected = false;
                 this.claseSelected = false;
